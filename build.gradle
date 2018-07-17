@@ -1,0 +1,19 @@
+
+apply plugin: 'java'
+
+version = '0.01'
+jar {
+    manifest {
+        attributes  'Main-Class': 'lemin.logic.Main',
+                    'Implementation-Title': 'Lemin project',
+                    'Implementation-Version': version
+    }
+}
+
+sourceSets {
+   main {
+      java {
+         srcDir 'src'
+      }
+   }
+}
