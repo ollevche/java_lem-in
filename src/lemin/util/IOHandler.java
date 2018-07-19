@@ -6,10 +6,11 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lemin.logic.AntFarm;
 import lemin.objects.Ants;
 import lemin.objects.Room;
 
-public class IOHandler
+public class IOHandler implements AutoCloseable
 {
 	public static final String ANTS_PATTERN = "^(\\d+)$";
 	public static final String ROOM_PATTERN = "^([^-#L ]+)\\s(\\d+)\\s(\\d+)$";
@@ -25,16 +26,14 @@ public class IOHandler
 
 	public Ants readAnts()
 	{
-		Ants ants;
+		Ants ants = null;
 		Matcher matcher;
 		Pattern pattern = Pattern.compile(ANTS_PATTERN);
 
 		buffer = scanner.nextLine();
 		matcher = pattern.matcher(buffer);
 		if (matcher.matches())
-			ants = new Ants(matcher.group(1));
-		else
-			throw (new DataLackException("Ants not found"));
+			ants = new Ants(matcher);
 		return (ants);
 	}
 
@@ -43,7 +42,7 @@ public class IOHandler
 		Matcher matcher;
 		Boolean isMatched;
 		Pattern pattern = Pattern.compile(ROOM_PATTERN);
-		ArrayList<Room> rooms = new ArrayList<>(); // optimize
+		ArrayList<Room> rooms = new ArrayList<>();
 
 		do
 		{
@@ -54,8 +53,34 @@ public class IOHandler
 				rooms.add(new Room(matcher));
 		}
 		while (isMatched);
-		if (rooms.isEmpty())
-			throw (new DataLackException("Rooms not found"));
 		return (rooms);
+	}
+
+	public void	readLinks(AntFarm antFarm)
+	{
+		Matcher	matcher;
+		Boolean	isMatched;
+		Pattern pattern = Pattern.compile(LINK_PATTERN);
+
+		do
+		{
+			matcher = pattern.matcher(buffer);
+			isMatched = matcher.matches();
+			if (isMatched)
+				antFarm.linkTwoRooms(matcher.group(1), matcher.group(2));
+			buffer = scanner.nextLine();
+		}
+		while (isMatched);
+	}
+
+	public void	printAntFarm(AntFarm antFarm)
+	{
+
+	}
+
+	@Override
+	public void	close()
+	{
+		scanner.close();
 	}
 }

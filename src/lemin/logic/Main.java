@@ -2,20 +2,23 @@
 package lemin.logic;
 
 import lemin.util.DataLackException;
+import lemin.util.IOHandler;
 
 public class Main
 {
 	public static void main(String[] args)
 	{
-		AntsFarm	antsFarm;
+		AntFarm	antFarm;
 
-		antsFarm = new AntsFarm();
-		try
+		antFarm = new AntFarm();
+		try (IOHandler ioHandler = new IOHandler())
 		{
-			antsFarm.readInput();
-			antsFarm.doTheMath();
-			antsFarm.printInput(); // move after try-catch?
-			antsFarm.printOutput(); // move after try-catch?
+			antFarm.setAnts(ioHandler.readAnts());
+			antFarm.setRooms(ioHandler.readRooms());
+			ioHandler.readLinks(antFarm);
+			antFarm.doTheMath();
+			ioHandler.printAntFarm(antFarm);
+			// ioHandler.printOutput(antFarm);
 		}
 		catch (DataLackException e)
 		{

@@ -5,13 +5,15 @@ import java.util.regex.Matcher;
 
 public class Ants
 {
-	public Ants(String amount)
+	private int	amount;
+
+	public Ants(int amount)
 	{
-		System.out.println("ants = " + amount);
+		this.amount = amount;
 	}
 
 	public Ants(Matcher matcher)
 	{
-		
+		this(Integer.parseInt(matcher.group(1)));
 	}
 }
