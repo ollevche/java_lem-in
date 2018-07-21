@@ -34,4 +34,31 @@ public class Room implements Comparable<Room>
 		return (name.compareTo(r.getName()));
 	}
 
+	@Override
+	public boolean equals(Object obj)
+	{
+		Room someroom;
+
+		if (obj == this)
+			return (true);
+		if (obj == null || !(obj instanceof Room))
+			return (false);
+		someroom = (Room)obj;
+		if (this.compareTo(someroom) == 0)
+			return (true);
+		return (false);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return (this.name.hashCode());
+	}
+
+	@Override
+	public String toString()
+	{
+		return (String.format("%s %d %d", name, x, y));
+	}
+
 }

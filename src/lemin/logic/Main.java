@@ -1,7 +1,7 @@
 
 package lemin.logic;
 
-import lemin.util.DataLackException;
+import lemin.util.InputDataMismatch;
 import lemin.util.IOHandler;
 
 public class Main
@@ -20,9 +20,9 @@ public class Main
 			ioHandler.printAntFarm(antFarm);
 			// ioHandler.printOutput(antFarm);
 		}
-		catch (DataLackException e)
+		catch (InputDataMismatch e)
 		{
-			System.err.println("Not enough input data: " + e.getMessage());
+			System.err.println("Input data error: " + e.getMessage());
 		}
 		catch (Exception e)
 		{

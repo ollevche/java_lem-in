@@ -3,10 +3,11 @@ package lemin.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
 import lemin.objects.Ants;
 import lemin.objects.Room;
-import lemin.util.DataLackException;
+import lemin.util.InputDataMismatch;
 
 public class AntFarm
 {
@@ -18,18 +19,23 @@ public class AntFarm
 
 	}
 
+	public void	linkTwoRooms(String fName, String sName)
+	{
+		System.out.printf("%s linked with %s\n", fName, sName);
+	}
+
 	public void	setRooms(ArrayList<Room> rooms)
 	{
 		if (rooms.isEmpty())
-			throw (new DataLackException("No rooms found"));
+			throw (new InputDataMismatch("No rooms found"));
 		Collections.sort(rooms);
 		this.rooms = rooms;
 	}
 
 	public void	setAnts(Ants ants)
 	{
-		if (ants == null)
-			throw (new DataLackException("No ants found"));
+		if (ants.getAmount() <= 0)
+			throw (new InputDataMismatch("No ants found"));
 		this.ants = ants;
 	}
 
@@ -45,9 +51,14 @@ public class AntFarm
 		return (rooms.get(ind));
 	}
 
-	public void	linkTwoRooms(String fName, String sName)
+	public ArrayList<Room> getRooms()
 	{
-		System.out.printf("%s linked with %s\n", fName, sName);
+		return (rooms);
+	}
+
+	public Ants getAnts()
+	{
+		return (ants);
 	}
 
 }
