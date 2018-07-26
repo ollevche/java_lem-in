@@ -3,7 +3,7 @@ package lemin.objects;
 
 import java.util.regex.Matcher;
 
-public class Room implements Comparable<Room>
+public class Room extends InformationalObj implements Comparable<Room>
 {
 	private String	name;
 	private int		x;

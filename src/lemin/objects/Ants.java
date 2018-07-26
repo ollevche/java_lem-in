@@ -3,10 +3,9 @@ package lemin.objects;
 
 import java.util.LinkedList;
 
-public class Ants
+public class Ants extends InformationalObj
 {
 	private int	amount;
-	private LinkedList<String> info; // optimize
 
 	public Ants()
 	{
@@ -23,19 +22,14 @@ public class Ants
 		this.amount = amount;
 	}
 
-	public int	getAmount()
-	{
-		return (amount);
-	}
-
 	public void setAmount(String amount)
 	{
 		this.amount = Integer.valueOf(amount);
 	}
 
-	public void setInfo(LinkedList<String> info)
+	public int	getAmount()
 	{
-		this.info = info;
+		return (amount);
 	}
 
 	@Override

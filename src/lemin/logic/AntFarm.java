@@ -3,7 +3,6 @@ package lemin.logic;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 
 import lemin.objects.Ants;
 import lemin.objects.Room;

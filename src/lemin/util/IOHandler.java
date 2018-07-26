@@ -22,6 +22,7 @@ public class IOHandler implements AutoCloseable
 
 	private Scanner scanner;
 	private String buffer;
+	private LinkedList<String> buffInfo;
 
 	public IOHandler()
 	{
@@ -35,7 +36,7 @@ public class IOHandler implements AutoCloseable
 
 	private LinkedList<String>	readObjInfo()
 	{
-		LinkedList<String> info = new LinkedList<>();
+		LinkedList<String> info = null;
 		Boolean isMatched;
 
 		do
@@ -43,6 +44,8 @@ public class IOHandler implements AutoCloseable
 			isMatched = buffer.matches(COMMENT_PATTERN);
 			if (isMatched)
 			{
+				if (info == null)
+					info = new LinkedList<>();
 				info.add(buffer);
 				buffer = scanner.nextLine();				
 				if (buffer.matches(COMMAND_PATTERN))
@@ -77,6 +80,7 @@ public class IOHandler implements AutoCloseable
 		do
 		{
 			buffer = scanner.nextLine();
+			buffInfo = readObjInfo();
 			matcher = pattern.matcher(buffer);
 			isMatched = matcher.matches();
 			if (isMatched)
