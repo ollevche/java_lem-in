@@ -85,17 +85,17 @@ public class IOHandler implements AutoCloseable
 			matcher = pattern.matcher(buffer);
 			isMatched = matcher.matches();
 			if (isMatched)
+			{
 				antFarm.addLink(matcher);
-			else
-				throw (new InputDataMismatch("Invalid line"));
-			buffer = scanner.nextLine();
+				buffer = scanner.nextLine();
+			}
 		}
 		while (isMatched);
 	}
 
 	public void	printAntFarm(AntFarm antFarm)
 	{
-		System.out.println("Received input:");
+		System.out.println("\nReceived input:");
 		System.out.print(antFarm.getAnts());
 		antFarm.getRooms()
 			.stream()
@@ -103,7 +103,6 @@ public class IOHandler implements AutoCloseable
 		antFarm.getLinks()
 			.stream()
 			.forEach(System.out::print);
-		System.out.println("Let me try...");
 	}
 
 	@Override

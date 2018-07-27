@@ -9,19 +9,17 @@ public class Main
 	public static void	main(String[] args)
 	{
 		AntFarm	antFarm = new AntFarm();
-		IOHandler ioHandler = new IOHandler();
 
-		try
+		try (IOHandler ioHandler = new IOHandler())
 		{
 			ioHandler.readAnts(antFarm);
 			ioHandler.readRooms(antFarm);
 			ioHandler.readLinks(antFarm);
+			ioHandler.printAntFarm(antFarm);
 		}
 		catch (InputDataMismatch e)
 		{
 			System.err.println("Input data error: " + e.getMessage());
 		}
-		ioHandler.printAntFarm(antFarm);
-		ioHandler.close();
 	}
 }
