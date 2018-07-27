@@ -1,43 +1,30 @@
 
 package lemin.objects;
 
-import java.util.LinkedList;
-
-public class Ants extends InformationalObj
+public class Ants
 {
-	private int	amount;
+	private int         amount;
+	private ObjectInfo  info;
 
-	public Ants()
-	{
-
-	}
-
-	public Ants(int amount)
-	{
-		setAmount(amount);
-	}
-
-	public void setAmount(int amount)
+	public	Ants(int amount, ObjectInfo info)
 	{
 		this.amount = amount;
-	}
-
-	public void setAmount(String amount)
-	{
-		this.amount = Integer.valueOf(amount);
+		this.info = info;
 	}
 
 	public int	getAmount()
 	{
-		return (amount);
+		return amount;
+	}
+
+	public ObjectInfo	getInfo()
+	{
+		return info;
 	}
 
 	@Override
-	public String toString()
+	public String	toString()
 	{
-		String antsObj;
-
-		antsObj = String.format("%s%d", info, amount);
-		return (antsObj);
+		return String.format(info + "%d\n", amount);
 	}
 }

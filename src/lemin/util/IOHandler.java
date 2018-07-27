@@ -1,16 +1,12 @@
 
 package lemin.util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lemin.logic.AntFarm;
-import lemin.objects.Ants;
-import lemin.objects.Room;
+import lemin.objects.ObjectInfo;
 
 public class IOHandler implements AutoCloseable
 {
@@ -20,75 +16,61 @@ public class IOHandler implements AutoCloseable
 	public static final String COMMENT_PATTERN = "^(#.*)$";
 	public static final String COMMAND_PATTERN = "^(##.*)$";
 
-	private Scanner scanner;
-	private String buffer;
-	private LinkedList<String> buffInfo;
+	private Scanner	scanner;
+	private String	buffer;
 
-	public IOHandler()
+	public	IOHandler()
 	{
 		scanner = new Scanner(System.in);
 	}
 
-	/*
-	**	reads all of the comments and a command
-	**	checks if the command is last line before the obj (ants or room or link)
-	*/
-
-	private LinkedList<String>	readObjInfo()
+	private ObjectInfo	readObjInfo()
 	{
-		LinkedList<String> info = null;
-		Boolean isMatched;
+		ObjectInfo	info = new ObjectInfo();
 
-		do
+		while (true)
 		{
-			isMatched = buffer.matches(COMMENT_PATTERN);
-			if (isMatched)
-			{
-				if (info == null)
-					info = new LinkedList<>();
-				info.add(buffer);
-				buffer = scanner.nextLine();				
-				if (buffer.matches(COMMAND_PATTERN))
-					break;
-			}
+			if (buffer.matches(COMMAND_PATTERN))
+				info.addCommand(buffer);
+			else if (buffer.matches(COMMENT_PATTERN))
+				info.addComment(buffer);
+			else
+				break ;
+			buffer = scanner.nextLine();
 		}
-		while (isMatched);
-		return (info);
+		return info;
 	}
 
-	public Ants	readAnts()
+	public void	readAnts(AntFarm antFarm)
 	{
-		Ants ants = new Ants();
-		Matcher matcher;
-		Pattern pattern = Pattern.compile(ANTS_PATTERN);
+		int			amount = 0;
+		Matcher		matcher;
+		Pattern		pattern = Pattern.compile(ANTS_PATTERN);
 
 		buffer = scanner.nextLine();
-		ants.setInfo(readObjInfo());
+		antFarm.addInfo(readObjInfo());
 		matcher = pattern.matcher(buffer);
 		if (matcher.matches())
-			ants.setAmount(matcher.group(1));;
-		return (ants);
+			amount = Integer.valueOf(matcher.group(1));
+		antFarm.setAnts(amount);
 	}
 
-	public ArrayList<Room>	readRooms()
+	public void	readRooms(AntFarm antFarm)
 	{
-		Matcher matcher;
-		Boolean isMatched;
-		Pattern pattern = Pattern.compile(ROOM_PATTERN);
-		HashSet<Room> rooms = new HashSet<>();
+		Matcher 	matcher;
+		Boolean 	isMatched;
+		Pattern 	pattern = Pattern.compile(ROOM_PATTERN);
 
 		do
 		{
 			buffer = scanner.nextLine();
-			buffInfo = readObjInfo();
+			antFarm.addInfo(readObjInfo());
 			matcher = pattern.matcher(buffer);
 			isMatched = matcher.matches();
 			if (isMatched)
-				if (!rooms.add(new Room(matcher)))
-					throw (new InputDataMismatch("Duplicate rooms found"));
+				antFarm.addRoom(matcher);
 		}
 		while (isMatched);
-		return (new ArrayList<Room>(rooms));
 	}
 
 	public void	readLinks(AntFarm antFarm)
@@ -99,10 +81,13 @@ public class IOHandler implements AutoCloseable
 
 		do
 		{
+			antFarm.addInfo(readObjInfo());
 			matcher = pattern.matcher(buffer);
 			isMatched = matcher.matches();
 			if (isMatched)
-				antFarm.linkTwoRooms(matcher.group(1), matcher.group(2));
+				antFarm.addLink(matcher);
+			else
+				throw (new InputDataMismatch("Invalid line"));
 			buffer = scanner.nextLine();
 		}
 		while (isMatched);
@@ -110,10 +95,15 @@ public class IOHandler implements AutoCloseable
 
 	public void	printAntFarm(AntFarm antFarm)
 	{
-		System.out.println("Received input:\n" + antFarm.getAnts());
+		System.out.println("Received input:");
+		System.out.print(antFarm.getAnts());
 		antFarm.getRooms()
 			.stream()
-			.forEach(System.out::println);
+			.forEach(System.out::print);
+		antFarm.getLinks()
+			.stream()
+			.forEach(System.out::print);
+		System.out.println("Let me try...");
 	}
 
 	@Override
