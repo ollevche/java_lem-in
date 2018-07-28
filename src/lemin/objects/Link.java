@@ -24,6 +24,16 @@ public class Link
 		return to;
 	}
 
+	public int	getFromId()
+	{
+		return from.getId();
+	}
+
+	public int	getToId()
+	{
+		return to.getId();
+	}
+
 	public ObjectInfo	getInfo()
 	{
 		return info;
@@ -32,7 +42,6 @@ public class Link
 	@Override
 	public String	toString()
 	{
-		return String.format(info + "%s-%s\n",
-								from.getName(), to.getName());
+		return String.format("%s-%s", from.getName(), to.getName());
 	}
 }

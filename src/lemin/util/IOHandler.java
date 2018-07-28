@@ -1,12 +1,17 @@
 
 package lemin.util;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lemin.logic.AntFarm;
+import lemin.logic.AntGraph;
+import lemin.objects.Link;
 import lemin.objects.ObjectInfo;
+import lemin.objects.Path;
+import lemin.objects.Room;
 
 public class IOHandler implements AutoCloseable
 {
@@ -93,16 +98,14 @@ public class IOHandler implements AutoCloseable
 		while (isMatched);
 	}
 
-	public void	printAntFarm(AntFarm antFarm)
+	public void	printAntFarm(AntFarm antFarm) // improve it
 	{
 		System.out.println("\nReceived input:");
-		System.out.print(antFarm.getAnts());
-		antFarm.getRooms()
-			.stream()
-			.forEach(System.out::print);
-		antFarm.getLinks()
-			.stream()
-			.forEach(System.out::print);
+		System.out.printf("%s%s\n", antFarm.getAnts().getInfo(), antFarm.getAnts());
+		for (Room r : antFarm.getRooms())
+			System.out.printf("%s%s\n", r.getInfo(), r);
+		for (Link l : antFarm.getLinks())
+			System.out.printf("%s%s\n", l.getInfo(), l);
 	}
 
 	@Override
@@ -110,4 +113,14 @@ public class IOHandler implements AutoCloseable
 	{
 		scanner.close();
 	}
+
+	public void printPaths(AntGraph antGraph)
+	{
+		List<Path> paths = antGraph.getPaths();
+
+		System.out.printf("\nFound paths (%d):\n", paths.size());
+		for (Path p : paths)
+			System.out.println(p);
+	}
+
 }

@@ -25,6 +25,6 @@ public class Ants
 	@Override
 	public String	toString()
 	{
-		return String.format(info + "%d\n", amount);
+		return String.valueOf(amount);
 	}
 }

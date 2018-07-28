@@ -4,7 +4,7 @@ package lemin.objects;
 public class Room implements Comparable<Room>
 {
 	private String		name;
-	private int			x, y;
+	private int			x, y, id;
 	private ObjectInfo	info;
 
 	public	Room (String name, int x, int y)
@@ -26,9 +26,19 @@ public class Room implements Comparable<Room>
 	}
 
 	public ObjectInfo getInfo()
-    {
-        return info;
-    }
+	{
+		return info;
+	}
+
+	public int	getId()
+	{
+		return id;
+	}
+
+	public void	setId(int id)
+	{
+		this.id = id;
+	}
 
 	@Override
 	public int	compareTo(Room r)
@@ -60,7 +70,7 @@ public class Room implements Comparable<Room>
 	@Override
 	public String	toString()
 	{
-		return String.format(info + "%s %d %d\n", name, x, y);
+		return String.format("%s %d %d", name, x, y);
 	}
 
 }

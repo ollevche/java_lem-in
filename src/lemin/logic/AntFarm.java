@@ -4,6 +4,7 @@ package lemin.logic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 
 import lemin.objects.Ants;
@@ -14,11 +15,11 @@ import lemin.util.InputDataMismatch;
 
 /*
 **	AntFarm checks for:
-**		duplicate rooms names
-**		duplicate start/end commands
-**		"No rooms" error
-**		"No links" error
-**		"No ants" error
+**		duplicate rooms names (OK)
+**		duplicate start/end commands (OK)
+**		"No rooms" error (graph)
+**		"No links" error (graph)
+**		"No ants" error (OK)
 */
 
 public class AntFarm
@@ -27,7 +28,6 @@ public class AntFarm
 	private ArrayList<Room>		rooms;
 	private LinkedList<Link>	links;
 	private	ObjectInfo			nextObjInfo;
-	private int					lastInsertedId; // is it really needed?
 	private	int					startRoomId;
 	private int					endRoomId;
 
@@ -35,7 +35,6 @@ public class AntFarm
 	{
 		rooms = new ArrayList<>();
 		links = new LinkedList<>();
-		lastInsertedId = -1;
 		startRoomId = -1;
 		endRoomId = -1;
 	}
@@ -71,7 +70,6 @@ public class AntFarm
 				break ;
 		}
 		rooms.add(i, newOne); // optimize
-		lastInsertedId = i;
 		return true;
 	}
 
@@ -84,9 +82,9 @@ public class AntFarm
 		if (!insertRoom(new Room(name, x, y, nextObjInfo)))
 			throw (new InputDataMismatch("Duplicate rooms found"));
 		if (nextObjInfo.hasStartCommand())
-			startRoomId = lastInsertedId;
+			startRoomId = 0;
 		else if (nextObjInfo.hasEndCommand())
-			endRoomId = lastInsertedId;
+			endRoomId = 0;
 		nextObjInfo = null;
 		return true;
 	}
@@ -117,6 +115,27 @@ public class AntFarm
 		return true;
 	}
 
+	/*
+	**	Needed for all path finding.
+	**	It should be done after all addRoom operations,
+	**	because rooms are inserted in their "right" places
+	*/
+
+	public void	indexRooms()
+	{
+		int id = 0;
+
+		for (Room r : rooms)
+		{
+			r.setId(id);
+			if (r.getInfo().hasStartCommand())
+				startRoomId = id;
+			if (r.getInfo().hasEndCommand())
+				endRoomId = id;
+			id++;
+		}
+	}
+
 	public int	getRoomId(String name)
 	{
 		Room target;
@@ -142,14 +161,23 @@ public class AntFarm
 		return ants;
 	}
 
-	public ArrayList<Room>	getRooms()
+	public List<Room>	getRooms()
 	{
 		return rooms;
 	}
 
-	public LinkedList<Link>	getLinks()
+	public List<Link>	getLinks()
 	{
 		return links;
 	}
 
+	public int getStartId()
+	{
+		return startRoomId;
+	}
+
+	public int getEndId()
+	{
+		return endRoomId;
+	}
 }
