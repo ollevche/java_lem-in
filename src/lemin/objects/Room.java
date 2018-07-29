@@ -35,6 +35,16 @@ public class Room implements Comparable<Room>
 		return id;
 	}
 
+	public int	getX()
+	{
+		return x;
+	}
+
+	public int	getY()
+	{
+		return y;
+	}
+
 	public void	setId(int id)
 	{
 		this.id = id;
@@ -70,7 +80,8 @@ public class Room implements Comparable<Room>
 	@Override
 	public String	toString()
 	{
-		return String.format("%s %d %d", name, x, y);
+		// return String.format("%s %d %d", name, x, y);
+		return (name);
 	}
 
 }

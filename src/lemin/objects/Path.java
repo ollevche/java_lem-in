@@ -8,7 +8,7 @@ import lemin.logic.AntFarm;
 
 public class Path
 {
-	private ArrayList<Room> rooms;
+	private List<Room>	rooms;
 
 	public Path(AntFarm antFarm, List<Integer> roomsIds)
 	{

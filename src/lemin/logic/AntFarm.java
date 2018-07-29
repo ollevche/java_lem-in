@@ -13,23 +13,14 @@ import lemin.objects.ObjectInfo;
 import lemin.objects.Room;
 import lemin.util.InputDataMismatch;
 
-/*
-**	AntFarm checks for:
-**		duplicate rooms names (OK)
-**		duplicate start/end commands (OK)
-**		"No rooms" error (graph)
-**		"No links" error (graph)
-**		"No ants" error (OK)
-*/
-
 public class AntFarm
 {
-	private Ants 				ants;
-	private ArrayList<Room>		rooms;
-	private LinkedList<Link>	links;
-	private	ObjectInfo			nextObjInfo;
-	private	int					startRoomId;
-	private int					endRoomId;
+	private Ants 		ants;
+	private List<Room>	rooms;
+	private List<Link>	links;
+	private	ObjectInfo	nextObjInfo;
+	private	int			startRoomId;
+	private int			endRoomId;
 
 	public	AntFarm()
 	{

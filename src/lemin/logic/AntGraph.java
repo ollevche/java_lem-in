@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import lemin.objects.Ants;
 import lemin.objects.Link;
 import lemin.objects.Path;
 import lemin.objects.Room;
@@ -12,8 +13,10 @@ import lemin.util.FatalDataLack;
 
 public class AntGraph
 {
-	private	AntFarm			antFarm;
-	private ArrayList<Path>	paths;
+	private	AntFarm		antFarm;
+	private List<Path>	paths;
+	private List<Path>	bestSet;
+	private int			bestSteps;
 
 	public AntGraph(AntFarm antFarm)
 	{
@@ -55,16 +58,16 @@ public class AntGraph
 			{
 				visited.add(i);
 				dfsearch(adjMatrix, visited, endId, paths);
-				visited.remove(visited.size() - 1); // check it
+				visited.remove(visited.size() - 1);
 			}
 		}
 	}
 
 	public void	findAllPaths()
 	{
-		ArrayList<Integer>	visited;
-		int[][]				adjMatrix;
-		LinkedList<Path>	paths = new LinkedList<>();
+		List<Integer>	visited;
+		int[][]			adjMatrix;
+		List<Path>		paths = new LinkedList<>();
 
 		antFarm.indexRooms();
 		adjMatrix = createMatrix(antFarm.getRooms(), antFarm.getLinks());
@@ -76,9 +79,32 @@ public class AntGraph
 		this.paths = new ArrayList<>(paths);
 	}
 
+	public List<Path>	pickSet(int size)
+	{
+		
+	}
+
+	public void	pickBestSet()
+	{
+		Ants		ants = antFarm.getAnts();
+		List<Path>	curSet = bestSet = pickSet(1);
+		int			curSteps = bestSteps = ants.runThrough(curSet);
+
+		do
+		{
+			curSet = pickSet(curSet.size() + 1);
+			curSteps = ants.runThrough(curSet);
+			if (curSteps < bestSteps)
+			{
+				bestSteps = curSteps;
+				bestSet = curSet;
+			}
+		}
+		while (curSteps >= bestSteps);
+	}
+
 	public List<Path>	getPaths()
 	{
 		return paths;
 	}
-
 }
