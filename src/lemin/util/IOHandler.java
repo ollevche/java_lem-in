@@ -12,6 +12,7 @@ import lemin.objects.Ants;
 import lemin.objects.Link;
 import lemin.objects.ObjectInfo;
 import lemin.objects.Path;
+import lemin.objects.PathSet;
 import lemin.objects.Room;
 
 public class IOHandler implements AutoCloseable
@@ -111,12 +112,17 @@ public class IOHandler implements AutoCloseable
 			System.out.printf("%s%s\n", l.getInfo(), l);
 	}
 
-	public void printPaths(AntGraph antGraph)
+	public void printPaths(List<Path> paths)
 	{
-		List<Path> paths = antGraph.getPaths();
-
 		System.out.printf("\nFound paths (%d):\n", paths.size());
 		for (Path p : paths)
+			System.out.println(p);
+	}
+
+	public void printSet(PathSet set)
+	{
+		System.out.printf("\nBest set (%d):\n", set.size());
+		for (Path p : set.getPaths())
 			System.out.println(p);
 	}
 

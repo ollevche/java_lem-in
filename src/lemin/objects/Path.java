@@ -2,6 +2,7 @@
 package lemin.objects;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Path implements Comparable<Path>
@@ -16,9 +17,12 @@ public class Path implements Comparable<Path>
 			rooms.add(allRooms.get(id));
 	}
 
-	public boolean isIntersect(Path anotherOne)
+	public boolean isIntersect(Path anotherOne, int roomsCount)
     {
-		
+		PathSet dummySet = new PathSet(1);
+
+		dummySet.add(this);
+		return dummySet.isIntersect(anotherOne, roomsCount);
 	}
 
 	public void	setId(int id)
@@ -34,6 +38,11 @@ public class Path implements Comparable<Path>
 	public int	getLen()
 	{
 		return rooms.size();
+	}
+
+	public List<Room>	getRooms()
+	{
+		return Collections.unmodifiableList(rooms);
 	}
 
 	@Override

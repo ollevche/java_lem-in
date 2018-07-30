@@ -92,23 +92,31 @@ public class AntGraph
 			p.setId(id++);
 	}
 
-	private PathSet	buildSet(int size, PathSet progress)
+	private PathSet	buildSet(int size, PathSet progress) // TODO: review and rewrite it (the whole algo)
 	{
 		PathSet best = new PathSet(size);
 		Path	next;
 
-		// next = paths.get(progress.getLastId() + 1); // returns -1 if empty
 		next = progress.getShortestDisjoint(paths, antFarm.getRooms().size());
 		if (next == null)
 			return best;
+		if (progress.size() == size - 1)
+		{
+			progress.add(next);
+			best.copyAll(progress);
+			return best;
+		}
 		paths.stream()
 			.skip(next.getId() + 1) // (id == 0) -> skip one (current) element
-			.filter(p -> p.isIntersect(next)) // leaves intersectors of next path
+			.filter(p -> !progress.contains(p) // leaves intersectors of next path
+				&& p.isIntersect(next, antFarm.getRooms().size()))
+			.limit(size - progress.size() - 1) // -1 because of 'next' (will be in progress)
 			.forEach(p -> { // applies buildSet() with extended progress, then shrinks it
-				progress.add(next);
+				if (!progress.add(next)) // it's for safety only
+					return ; // del it  if limit() works properly
 				PathSet someSet = buildSet(size, progress);
-				if (best.compareLen(someSet) > 0) // handle default value
-					best.copy(someSet);
+				if (best.compareLen(someSet) > 0)
+					best.copyAll(someSet);
 				progress.delLast(); });
 		return best;
 	}
@@ -133,6 +141,11 @@ public class AntGraph
 		}
 		while (sizeBest.size() <= ants.getAmount());
 		return bestSet; // modifiable
+	}
+
+	public PathSet	getBestSet()
+	{
+		return bestSet;
 	}
 
 	public List<Path>	getPaths()

@@ -20,9 +20,9 @@ public class Main
 			ioHandler.printAntFarm(antFarm);
 			antGraph = new AntGraph(antFarm);
 			antGraph.findAllPaths();
-			ioHandler.printPaths(antGraph);
-			// antGraph.pickBestSet();
-			// ioHandler.printSet(antGraph);
+			ioHandler.printPaths(antGraph.getPaths());
+			antGraph.pickBestSet();
+			ioHandler.printSet(antGraph.getBestSet());
 		}
 		catch (InputDataMismatch e)
 		{
