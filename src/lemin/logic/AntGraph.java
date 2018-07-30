@@ -2,8 +2,11 @@
 package lemin.logic;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lemin.objects.Ants;
 import lemin.objects.Link;
@@ -63,7 +66,7 @@ public class AntGraph
 		}
 	}
 
-	public void	findAllPaths()
+	public List<Path>	findAllPaths()
 	{
 		List<Integer>	visited;
 		int[][]			adjMatrix;
@@ -77,14 +80,35 @@ public class AntGraph
 		if (paths.isEmpty())
 			throw (new FatalDataLack("End room cannot be reached"));
 		this.paths = new ArrayList<>(paths);
+		Collections.sort(this.paths); // comparable
+		return this.paths;
+	}
+
+	private boolean isDisjoint(Path path)
+	{
+		for (Path p : paths)
+		{
+			if (p.equals(path)) // comparable / equals
+				break ;
+			if (path.isIntersect(p))
+				return false;
+		}
+		return true;
 	}
 
 	public List<Path>	pickSet(int size)
 	{
-		
+		List<Path>	set;
+
+		set = paths.stream()
+			// .sorted()
+			.filter(this::isDisjoint)
+			.limit(size)
+			.collect(Collectors.toList()); // check it
+		return set;
 	}
 
-	public void	pickBestSet()
+	public List<Path>	pickBestSet()
 	{
 		Ants		ants = antFarm.getAnts();
 		List<Path>	curSet = bestSet = pickSet(1);
@@ -101,6 +125,7 @@ public class AntGraph
 			}
 		}
 		while (curSteps >= bestSteps);
+		return bestSet;
 	}
 
 	public List<Path>	getPaths()

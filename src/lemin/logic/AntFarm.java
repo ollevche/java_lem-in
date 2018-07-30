@@ -109,7 +109,7 @@ public class AntFarm
 	/*
 	**	Needed for all path finding.
 	**	It should be done after all addRoom operations,
-	**	because rooms are inserted in their "right" places
+	**	because of insertion sorting
 	*/
 
 	public void	indexRooms()
