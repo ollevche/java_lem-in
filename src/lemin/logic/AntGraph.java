@@ -107,10 +107,14 @@ public class AntGraph
 			return best;
 		}
 		paths.stream()
+			.peek(p -> System.out.println("a" + p)) // DEL
 			.skip(next.getId() + 1) // (id == 0) -> skip one (current) element
-			.filter(p -> !progress.contains(p) // leaves intersectors of next path
+			.peek(p -> System.out.println("b" + p)) // DEL
+			.filter(p -> !progress.contains(p) // leaves intersectors of next path // TODO: indexPaths and equals and etc....
 				&& p.isIntersect(next, antFarm.getRooms().size()))
+			.peek(p -> System.out.println("c" + p)) // DEL
 			.limit(size - progress.size() - 1) // -1 because of 'next' (will be in progress)
+			.peek(p -> System.out.println("d" + p)) // DEL
 			.forEach(p -> { // applies buildSet() with extended progress, then shrinks it
 				if (!progress.add(next)) // it's for safety only
 					return ; // del it  if limit() works properly

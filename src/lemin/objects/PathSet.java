@@ -40,17 +40,13 @@ public class PathSet
 		int id = 0;
 		Path shortest = allPaths.get(id);
 
-		do
+		while (contains(shortest) || isIntersect(shortest, roomsCount))
 		{
-			while (contains(shortest))
-			{
-				id++;
-				if (id > allPaths.size())
-					return null;
-				shortest = allPaths.get(id);
-			}
+			shortest = allPaths.get(id);
+			id++;
+			if (id >= allPaths.size())
+				return null;
 		}
-		while (isIntersect(shortest, roomsCount));
 		return shortest;
 	}
 
@@ -64,6 +60,7 @@ public class PathSet
 		if (paths.size() == capacity)
 			return false;
 		paths.add(next);
+		len += next.getLen();
 		return true;
 	}
 
