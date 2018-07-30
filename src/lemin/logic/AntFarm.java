@@ -39,15 +39,6 @@ public class AntFarm
 		return true;
 	}
 
-	public boolean	addRoom(Matcher roomMatcher)
-	{
-		String	name = roomMatcher.group(1);
-		int	x = Integer.valueOf(roomMatcher.group(2));
-		int	y = Integer.valueOf(roomMatcher.group(3));
-
-		return addRoom(name, x, y);
-	}
-
 	private boolean	insertRoom(Room newOne)
 	{
 		int i, compRes;
@@ -78,6 +69,15 @@ public class AntFarm
 			endRoomId = 0;
 		nextObjInfo = null;
 		return true;
+	}
+
+	public boolean	addRoom(Matcher roomMatcher)
+	{
+		String	name = roomMatcher.group(1);
+		int	x = Integer.valueOf(roomMatcher.group(2));
+		int	y = Integer.valueOf(roomMatcher.group(3));
+
+		return addRoom(name, x, y);
 	}
 
 	public boolean	addLink(Matcher linkMatcher)
@@ -154,12 +154,12 @@ public class AntFarm
 
 	public List<Room>	getRooms()
 	{
-		return rooms;
+		return Collections.unmodifiableList(rooms);
 	}
 
 	public List<Link>	getLinks()
 	{
-		return links;
+		return Collections.unmodifiableList(links);
 	}
 
 	public int getStartId()

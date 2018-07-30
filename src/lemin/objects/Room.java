@@ -7,14 +7,14 @@ public class Room implements Comparable<Room>
 	private int			x, y, id;
 	private ObjectInfo	info;
 
-	public	Room (String name, int x, int y)
+	public	Room(String name, int x, int y)
 	{
 		this.name = name;
 		this.x = x;
 		this.y = y;
 	}
 
-	public	Room (String name, int x, int y, ObjectInfo info)
+	public	Room(String name, int x, int y, ObjectInfo info)
 	{
 		this(name, x, y);
 		this.info = info;
@@ -57,7 +57,7 @@ public class Room implements Comparable<Room>
 	}
 
 	@Override
-	public boolean	equals(Object obj)
+	public boolean	equals(Object obj) // do i use it? TODO: del
 	{
 		Room someroom;
 
@@ -80,7 +80,6 @@ public class Room implements Comparable<Room>
 	@Override
 	public String	toString()
 	{
-		// return String.format("%s %d %d", name, x, y);
 		return (name);
 	}
 
