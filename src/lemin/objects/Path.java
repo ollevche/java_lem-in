@@ -4,25 +4,47 @@ package lemin.objects;
 import java.util.ArrayList;
 import java.util.List;
 
-import lemin.logic.AntFarm;
-
-public class Path
+public class Path implements Comparable<Path>
 {
 	private List<Room>	rooms;
+	private int			id;
 
-	public Path(AntFarm antFarm, List<Integer> roomsIds)
+	public Path(List<Room> allRooms, List<Integer> roomsIds)
 	{
-		List<Room>  allRooms;
-
-		allRooms = antFarm.getRooms();
 		rooms = new ArrayList<>(roomsIds.size());
 		for (Integer id : roomsIds)
 			rooms.add(allRooms.get(id));
+	}
+
+	public boolean isIntersect(Path anotherOne)
+    {
+		
+	}
+
+	public void	setId(int id)
+	{
+		this.id = id;
+	}
+
+	public int	getId()
+	{
+		return id;
+	}
+
+	public int	getLen()
+	{
+		return rooms.size();
 	}
 
 	@Override
 	public String toString()
 	{
 		return rooms.toString();
+	}
+
+	@Override
+	public int compareTo(Path p)
+	{
+		return Integer.compare(getLen(), p.getLen());
 	}
 }

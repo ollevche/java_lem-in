@@ -2,24 +2,22 @@
 package lemin.logic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lemin.objects.Ants;
 import lemin.objects.Link;
 import lemin.objects.Path;
 import lemin.objects.Room;
+import lemin.objects.PathSet;
 import lemin.util.FatalDataLack;
 
 public class AntGraph
 {
-	private	AntFarm		antFarm;
-	private List<Path>	paths;
-	private List<Path>	bestSet;
-	private int			bestSteps;
+	private	AntFarm			antFarm;
+	private List<Path>		paths;
+	private PathSet			bestSet;
 
 	public AntGraph(AntFarm antFarm)
 	{
@@ -30,6 +28,8 @@ public class AntGraph
 		if (antFarm.getStartId() < 0 || antFarm.getEndId() < 0)
 			throw (new FatalDataLack("Route not defined"));
 		this.antFarm = antFarm;
+		paths = Collections.emptyList();
+		bestSet = new PathSet(0);
 	}
 
 	private int[][]	createMatrix(List<Room> rooms, List<Link> links)
@@ -52,7 +52,7 @@ public class AntGraph
 		curId = visited.get(visited.size() - 1);
 		if (curId == endId)
 		{
-			paths.add(new Path(antFarm, visited));
+			paths.add(new Path(antFarm.getRooms(), visited));
 			return ;
 		}
 		for (int i = 0; i < adjMatrix.length; i++)
@@ -66,7 +66,7 @@ public class AntGraph
 		}
 	}
 
-	public List<Path>	findAllPaths()
+	public void	findAllPaths()
 	{
 		List<Integer>	visited;
 		int[][]			adjMatrix;
@@ -79,57 +79,64 @@ public class AntGraph
 		dfsearch(adjMatrix, visited, antFarm.getEndId(), paths);
 		if (paths.isEmpty())
 			throw (new FatalDataLack("End room cannot be reached"));
-		this.paths = new ArrayList<>(paths);
-		Collections.sort(this.paths); // comparable
-		return this.paths;
+		indexPath(paths);
 	}
 
-	private boolean isDisjoint(Path path)
+	private void	indexPath(List<Path> notIndexed)
 	{
+		int id = 0;
+
+		paths = new ArrayList<>(notIndexed);
+		Collections.sort(paths);
 		for (Path p : paths)
-		{
-			if (p.equals(path)) // comparable / equals
-				break ;
-			if (path.isIntersect(p))
-				return false;
-		}
-		return true;
+			p.setId(id++);
 	}
 
-	public List<Path>	pickSet(int size)
+	private PathSet	buildSet(int size, PathSet progress)
 	{
-		List<Path>	set;
+		PathSet best = new PathSet(size);
+		Path	next;
 
-		set = paths.stream()
-			// .sorted()
-			.filter(this::isDisjoint)
-			.limit(size)
-			.collect(Collectors.toList()); // check it
-		return set;
+		// next = paths.get(progress.getLastId() + 1); // returns -1 if empty
+		next = progress.getShortestDisjoint(paths, antFarm.getRooms().size());
+		if (next == null)
+			return best;
+		paths.stream()
+			.skip(next.getId() + 1) // (id == 0) -> skip one (current) element
+			.filter(p -> p.isIntersect(next)) // leaves intersectors of next path
+			.forEach(p -> { // applies buildSet() with extended progress, then shrinks it
+				progress.add(next);
+				PathSet someSet = buildSet(size, progress);
+				if (best.compareLen(someSet) > 0) // handle default value
+					best.copy(someSet);
+				progress.delLast(); });
+		return best;
 	}
 
-	public List<Path>	pickBestSet()
+	public PathSet	pickBestSet()
 	{
-		Ants		ants = antFarm.getAnts();
-		List<Path>	curSet = bestSet = pickSet(1);
-		int			curSteps = bestSteps = ants.runThrough(curSet);
+		Ants	ants = antFarm.getAnts();
+		PathSet	sizeBest = bestSet = buildSet(1, new PathSet(1));
 
+		bestSet.evaluate(ants);
 		do
 		{
-			curSet = pickSet(curSet.size() + 1);
-			curSteps = ants.runThrough(curSet);
-			if (curSteps < bestSteps)
-			{
-				bestSteps = curSteps;
-				bestSet = curSet;
-			}
+			int size = sizeBest.size() + 1;
+			sizeBest = buildSet(size, new PathSet(size));
+			if (!sizeBest.isFull())
+				break ;
+			sizeBest.evaluate(ants);
+			if (bestSet.compareSteps(sizeBest) > 0)
+				bestSet = sizeBest;
+			else if (bestSet.compareSteps(sizeBest) < 0)
+				break ;
 		}
-		while (curSteps >= bestSteps);
-		return bestSet;
+		while (sizeBest.size() <= ants.getAmount());
+		return bestSet; // modifiable
 	}
 
 	public List<Path>	getPaths()
 	{
-		return paths;
+		return Collections.unmodifiableList(paths);
 	}
 }
