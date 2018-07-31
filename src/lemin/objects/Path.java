@@ -56,4 +56,20 @@ public class Path implements Comparable<Path>
 	{
 		return Integer.compare(getLen(), p.getLen());
 	}
+	
+	@Override
+	public boolean equals(Object obj) // TODO: review compareTo() / equals() / etc
+	{
+		Path somepath;
+		
+		if (obj == this)
+			return true;
+		if (obj == null || !(obj instanceof Path))
+			return false;
+		somepath = (Path)obj;
+		// if (this.compareTo(somepath) == 0)
+		if (somepath.getId() == getId())
+			return true;
+		return false;
+	}
 }

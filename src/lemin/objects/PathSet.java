@@ -117,7 +117,7 @@ public class PathSet
 
 	public boolean	contains(Path somePath)
 	{
-		return (paths.contains(somePath)); // TODO: check it
+		return (paths.contains(somePath));
 	}
 
 	public int getLen()

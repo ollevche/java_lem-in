@@ -95,9 +95,10 @@ public class AntGraph
 	private PathSet	buildSet(int size, PathSet progress) // TODO: review and rewrite it (the whole algo)
 	{
 		PathSet best = new PathSet(size);
+		int		roomsCount = antFarm.getRooms().size();
 		Path	next;
 
-		next = progress.getShortestDisjoint(paths, antFarm.getRooms().size());
+		next = progress.getShortestDisjoint(paths, roomsCount);
 		if (next == null)
 			return best;
 		if (progress.size() == size - 1)
@@ -106,22 +107,19 @@ public class AntGraph
 			best.copyAll(progress);
 			return best;
 		}
-		paths.stream()
-			.peek(p -> System.out.println("a" + p)) // DEL
-			.skip(next.getId() + 1) // (id == 0) -> skip one (current) element
-			.peek(p -> System.out.println("b" + p)) // DEL
-			.filter(p -> !progress.contains(p) // leaves intersectors of next path // TODO: indexPaths and equals and etc....
+		for (int i = next.getId(); i < paths.size(); i++)
+		{
+			Path p = paths.get(i); // move to header
+			if (!progress.isIntersect(p, roomsCount)
 				&& p.isIntersect(next, antFarm.getRooms().size()))
-			.peek(p -> System.out.println("c" + p)) // DEL
-			.limit(size - progress.size() - 1) // -1 because of 'next' (will be in progress)
-			.peek(p -> System.out.println("d" + p)) // DEL
-			.forEach(p -> { // applies buildSet() with extended progress, then shrinks it
-				if (!progress.add(next)) // it's for safety only
-					return ; // del it  if limit() works properly
+			{
+				progress.add(p);
 				PathSet someSet = buildSet(size, progress);
 				if (best.compareLen(someSet) > 0)
 					best.copyAll(someSet);
-				progress.delLast(); });
+				progress.delLast();
+			}
+		}
 		return best;
 	}
 
