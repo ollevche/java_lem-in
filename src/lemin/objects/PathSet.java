@@ -26,7 +26,7 @@ public class PathSet
 			for (Room r : rooms)
 				if (roomsCheckList[r.getId()] == 1)
 					return (true);
-				else
+				else if (!r.isStart() && !r.isEnd())
 					roomsCheckList[r.getId()] = 1;
 			if (id >= 0)
 				rooms = paths.get(id).getRooms();
@@ -55,7 +55,7 @@ public class PathSet
 		steps = ants.runThrough(paths);
 	}
 
-	public boolean add(Path next) // returns false if size == capacity
+	public boolean add(Path next)
 	{
 		if (paths.size() == capacity)
 			return false;
@@ -83,14 +83,14 @@ public class PathSet
 		return res;
 	}
 
-	public int compareLen(PathSet someSet) // TODO: comparator
+	public int compareLen(PathSet someSet) // improve: comparator
 	{
 		int comRes = Integer.compare(len, someSet.getLen());
 
 		return fullCheck(someSet, comRes);
 	}
 
-	public int compareSteps(PathSet someSet) // TODO: comparator
+	public int compareSteps(PathSet someSet) // improve: comparator
 	{
 		int comRes = Integer.compare(steps, someSet.getSteps());
 
@@ -102,14 +102,14 @@ public class PathSet
 		return (paths.size() == capacity);
 	}
 
-	public int size() // returns real size (not capacity)
+	public int size()
 	{
 		return paths.size();
 	}
 
 	public void copyAll(PathSet someSet)
 	{
-		this.paths = someSet.getPaths();
+		this.paths = new ArrayList<>(someSet.getPaths());
 		this.capacity = someSet.getCapacity();
 		this.len = someSet.getLen();
 		this.steps = someSet.getSteps();

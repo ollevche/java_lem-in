@@ -50,6 +50,16 @@ public class Room implements Comparable<Room>
 		this.id = id;
 	}
 
+	public boolean isStart()
+	{
+		return info.hasStartCommand();
+	}
+
+	public boolean isEnd()
+	{
+		return info.hasEndCommand();
+	}
+
 	@Override
 	public int	compareTo(Room r)
 	{
@@ -57,7 +67,7 @@ public class Room implements Comparable<Room>
 	}
 
 	@Override
-	public boolean	equals(Object obj) // do i use it? TODO: del
+	public boolean	equals(Object obj)
 	{
 		Room someroom;
 

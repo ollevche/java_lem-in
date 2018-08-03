@@ -46,7 +46,7 @@ public class ObjectInfo
 	}
 
 	@Override
-	public String toString() // improve the code
+	public String toString() // improve: the code
 	{
 		String comments = (this.comments == null ? "" : this.comments.toString() + "\n");
 		String command = (this.command == null ? "" : this.command + "\n");

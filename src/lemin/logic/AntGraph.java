@@ -92,7 +92,7 @@ public class AntGraph
 			p.setId(id++);
 	}
 
-	private PathSet	buildSet(int size, PathSet progress) // TODO: review and rewrite it (the whole algo)
+	private PathSet	buildSet(int size, PathSet progress) // TODO: test, review and rewrite it (the whole algo)
 	{
 		PathSet best = new PathSet(size);
 		int		roomsCount = antFarm.getRooms().size();
@@ -142,12 +142,12 @@ public class AntGraph
 				break ;
 		}
 		while (sizeBest.size() <= ants.getAmount());
-		return bestSet; // modifiable
+		return bestSet; // improve: modifiable
 	}
 
 	public PathSet	getBestSet()
 	{
-		return bestSet;
+		return bestSet; // improve: modifiable
 	}
 
 	public List<Path>	getPaths()

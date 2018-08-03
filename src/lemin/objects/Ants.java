@@ -16,7 +16,18 @@ public class Ants
 
 	public int runThrough(List<Path> curSet)
 	{
-		return (curSet.size() == 5 ? 0 : 1); // TODO: this
+		int		total, leftover, mergeVal, mergeSum = 0;
+		Path	path;
+
+		path = curSet.get(curSet.size() - 1);
+		mergeVal = path.getLen();
+		if (mergeVal == 2)
+			return (1);
+		for (Path p : curSet)
+			mergeSum += mergeVal - (p.getLen() - 1) + 1;
+		leftover = amount - mergeSum;
+		total = mergeVal + (int)Math.ceil(leftover / (float)curSet.size()); // TODO: check it
+		return (total);
 	}
 
 	public int	getAmount()
