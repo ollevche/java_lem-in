@@ -26,7 +26,7 @@ public class Ants
 		for (Path p : curSet)
 			mergeSum += mergeVal - (p.getLen() - 1) + 1;
 		leftover = amount - mergeSum;
-		total = mergeVal + (int)Math.ceil(leftover / (float)curSet.size()); // TODO: check it
+		total = mergeVal + (int)Math.ceil(leftover / (float)curSet.size());
 		return (total);
 	}
 

@@ -92,7 +92,7 @@ public class AntGraph
 			p.setId(id++);
 	}
 
-	private PathSet	buildSet(int size, PathSet progress) // TODO: test, review and rewrite it (the whole algo)
+	private PathSet	buildSet(int size, PathSet progress) // improve: the code
 	{
 		PathSet best = new PathSet(size);
 		int		roomsCount = antFarm.getRooms().size();
@@ -109,7 +109,7 @@ public class AntGraph
 		}
 		for (int i = next.getId(); i < paths.size(); i++)
 		{
-			Path p = paths.get(i); // move to header
+			Path p = paths.get(i);
 			if (!progress.isIntersect(p, roomsCount)
 				&& p.isIntersect(next, antFarm.getRooms().size()))
 			{
@@ -126,12 +126,13 @@ public class AntGraph
 	public PathSet	pickBestSet()
 	{
 		Ants	ants = antFarm.getAnts();
+		int		size;
 		PathSet	sizeBest = bestSet = buildSet(1, new PathSet(1));
 
 		bestSet.evaluate(ants);
 		do
 		{
-			int size = sizeBest.size() + 1;
+			size = sizeBest.size() + 1;
 			sizeBest = buildSet(size, new PathSet(size));
 			if (!sizeBest.isFull())
 				break ;
