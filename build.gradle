@@ -2,20 +2,32 @@
 apply plugin: 'java'
 
 version = '2.0'
-jar {
-    manifest {
-        attributes  'Main-Class': 'lemin.logic.Main',
-                    'Implementation-Title': 'Lemin project',
-                    'Implementation-Version': version
-    }
-    baseName = 'lemin'
+
+repositories {
+	mavenCentral()
 }
 
+dependencies {
+	testCompile 'junit:junit:4.12'
+}
+
+jar {
+	manifest {
+		attributes	'Main-Class': 'lemin.logic.Main',
+					'Implementation-Title': 'Lemin project'
+	}
+	baseName = 'lemin'
+}
 
 sourceSets {
-   main {
-      java {
-         srcDir 'src'
-      }
-   }
+	main {
+		java {
+			srcDir 'src/main'
+		}
+	}
+	test {
+		java {
+			srcDir 'src/test'
+		}
+	}
 }
