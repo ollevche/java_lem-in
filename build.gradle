@@ -31,3 +31,11 @@ sourceSets {
 		}
 	}
 }
+
+task InputTestSuite(type: Test) {
+   include 'InputTestSuite.class'
+}
+
+test {
+    exclude 'input/InputTestSuite.class'
+}
