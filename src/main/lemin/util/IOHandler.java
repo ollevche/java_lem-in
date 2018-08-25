@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lemin.logic.AntFarm;
-import lemin.logic.AntGraph;
 import lemin.objects.Ants;
 import lemin.objects.Link;
 import lemin.objects.ObjectInfo;
