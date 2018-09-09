@@ -73,10 +73,10 @@ public class AntGraph
 		List<Path>		paths = new LinkedList<>();
 
 		antFarm.indexRooms();
-		adjMatrix = createMatrix(antFarm.getRooms(), antFarm.getLinks());
+		adjMatrix = createMatrix(antFarm.getRooms(), antFarm.getLinks()); // OPTIMIZE: adjacency list is a faster way
 		visited = new ArrayList<>(antFarm.getRooms().size());
 		visited.add(antFarm.getStartId());
-		dfsearch(adjMatrix, visited, antFarm.getEndId(), paths);
+		dfsearch(adjMatrix, visited, antFarm.getEndId(), paths); // OPTIMIZE: dfs + sorting should be replaced by just bfs
 		if (paths.isEmpty())
 			throw (new FatalDataLack("End room cannot be reached"));
 		indexPath(paths);
@@ -92,7 +92,7 @@ public class AntGraph
 			p.setId(id++);
 	}
 
-	private PathSet	buildSet(int size, PathSet progress) // improve: the code
+	private PathSet	buildSet(int size, PathSet progress) // REFACTOR: the func
 	{
 		PathSet best = new PathSet(size);
 		int		roomsCount = antFarm.getRooms().size();
@@ -123,7 +123,7 @@ public class AntGraph
 		return best;
 	}
 
-	public PathSet	pickBestSet()
+	public PathSet	pickBestSet() // OPTIMIZE: it stops only when the last iteration fully bruteforced
 	{
 		Ants	ants = antFarm.getAnts();
 		int		size;
@@ -143,12 +143,12 @@ public class AntGraph
 				break ;
 		}
 		while (sizeBest.size() <= ants.getAmount());
-		return bestSet; // improve: modifiable
+		return bestSet; // TODO: unmodifiable return
 	}
 
 	public PathSet	getBestSet()
 	{
-		return bestSet; // improve: modifiable
+		return bestSet; // TODO: unmodifiable return
 	}
 
 	public List<Path>	getPaths()

@@ -51,7 +51,7 @@ public class AntFarm
 			if (compRes < 0)
 				break ;
 		}
-		rooms.add(i, newOne); // optimize
+		rooms.add(i, newOne); // OPTIMIZE: this
 		return true;
 	}
 
