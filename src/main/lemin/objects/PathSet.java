@@ -83,14 +83,14 @@ public class PathSet
 		return res;
 	}
 
-	public int compareLen(PathSet someSet) // TODO: it should be a comparator
+	public int compareLen(PathSet someSet) // TODO: it should be comparator
 	{
 		int comRes = Integer.compare(len, someSet.getLen());
 
 		return fullCheck(someSet, comRes);
 	}
 
-	public int compareSteps(PathSet someSet) // TODO: it should be a comparator
+	public int compareSteps(PathSet someSet) // TODO: it should be comparator
 	{
 		int comRes = Integer.compare(steps, someSet.getSteps());
 

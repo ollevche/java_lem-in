@@ -143,12 +143,12 @@ public class AntGraph
 				break ;
 		}
 		while (sizeBest.size() <= ants.getAmount());
-		return bestSet; // TODO: unmodifiable return
+		return bestSet;
 	}
 
 	public PathSet	getBestSet()
 	{
-		return bestSet; // TODO: unmodifiable return
+		return bestSet;
 	}
 
 	public List<Path>	getPaths()

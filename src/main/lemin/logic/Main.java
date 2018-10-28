@@ -5,6 +5,10 @@ import lemin.util.InputDataMismatch;
 import lemin.util.FatalDataLack;
 import lemin.util.IOHandler;
 
+/*
+**	keywords: OPTIMIZE, REFACTOR, TO-DO
+*/
+
 public class Main
 {
 	public static void	main(String[] args)

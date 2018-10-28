@@ -120,7 +120,7 @@ public class IOHandler implements AutoCloseable
 
 	public void printSet(PathSet set)
 	{
-		System.out.printf("\nBest set (s = %d, e = %d):\n", set.size(), set.getSteps());
+		System.out.printf("\nBest set (size = %d, eff = %d):\n", set.size(), set.getSteps());
 		for (Path p : set.getPaths())
 			System.out.println(p);
 	}
