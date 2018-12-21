@@ -1,0 +1,42 @@
+DROP DATABASE lemindb;
+
+CREATE DATABASE lemindb;
+
+CREATE TABLE Graph (
+  name VARCHAR(25) PRIMARY KEY,
+  definition TEXT
+);
+
+CREATE TABLE Set (
+  id SERIAL PRIMARY KEY,
+  graph_name VARCHAR(25) REFERENCES Graph(name) ON DELETE  CASCADE,
+  size INT NOT NULL,
+  ants_amount INT NOT NULL,
+  efficiency INT NOT NULL
+);
+
+CREATE TABLE Path (
+  id SERIAL PRIMARY KEY,
+  graph_name VARCHAR(25) REFERENCES Graph(name) ON DELETE  CASCADE,
+  name TEXT,
+  length INT
+);
+
+CREATE TABLE SetToPath (
+  set_id INT REFERENCES Set(id) ON DELETE CASCADE,
+  path_id INT REFERENCES Path(id) ON DELETE CASCADE,
+  PRIMARY KEY(set_id, path_id)
+);
+
+INSERT INTO Graph VALUES ('test name', 'test definition');
+INSERT INTO Set VALUES (DEFAULT, 'test name', 10, 2);
+INSERT INTO Path VALUES (DEFAULT, 'test name','start-room-room-end', 4);
+INSERT INTO SetToPath VALUES (2, 2);
+
+SELECT * FROM Graph;
+SELECT * FROM Set;
+SELECT * FROM Path;
+SELECT * FROM SetToPath;
+
+DELETE FROM Graph
+WHERE name = 'test name';
