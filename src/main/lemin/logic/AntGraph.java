@@ -155,4 +155,8 @@ public class AntGraph
 	{
 		return Collections.unmodifiableList(paths);
 	}
+
+	public AntFarm getFarm() {
+		return antFarm;
+	}
 }

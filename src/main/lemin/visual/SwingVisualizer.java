@@ -2,16 +2,24 @@ package lemin.visual;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import lemin.logic.AntGraph;
+import lemin.logic.Main;
+import lemin.objects.Path;
+import lemin.objects.PathSet;
 
 public class SwingVisualizer {
 	private JFrame mainFrame;
 	private JTextField loginTextField, graphNameTextField;
 	private JPasswordField passwordTextField;
 	private JTextArea graphInputTextArea;
-	private JTable setsTable, pathsTable;
+	private DefaultTableModel setsModel, pathsModel;
 
 	public SwingVisualizer(){
 		prepareMainFrame();
@@ -22,8 +30,8 @@ public class SwingVisualizer {
 
 	private void prepareMainFrame(){
 		mainFrame = new JFrame("Lemin 2.0");
-	   mainFrame.setSize(550,400);
-		mainFrame.setLayout(new GridLayout(3, 1));
+	   mainFrame.setSize(920,1010);
+		mainFrame.setLayout(new FlowLayout());
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent){
 			  System.exit(0);
@@ -72,8 +80,30 @@ public class SwingVisualizer {
 		mainFrame.setVisible(true);
 	}
 
+	private void run() {
+		AntGraph graph = Main.lemin(new ByteArrayInputStream((graphInputTextArea.getText() + "\n\n").getBytes(StandardCharsets.UTF_8)));
+
+		if (graph == null) {
+			return;
+		}
+
+		PathSet set = graph.getBestSet();
+		int ants = graph.getFarm().getAnts().getAmount();
+
+		emptyTableModel(setsModel);
+		setsModel.addRow(new String[]{"not set", Integer.toString(set.size()), Integer.toString(ants), Integer.toString(set.getSteps())});
+
+		java.util.List<Path> paths = graph.getPaths();
+		emptyTableModel(pathsModel);
+		for (int i = 0; i < paths.size(); i++) {
+			pathsModel.addRow(new String[]{"not set", paths.get(i).StringNodes(), Integer.toString(paths.get(i).getLen())});
+		}
+	}
+
 	private void prepareProcessPanel() {
 		JPanel processPanel = new JPanel();
+		TitledBorder processBorder = new TitledBorder("Graph processing");
+		processPanel.setBorder(processBorder);
 		processPanel.setLayout(new FlowLayout());
 		mainFrame.add(processPanel);
 
@@ -85,7 +115,7 @@ public class SwingVisualizer {
 
 		JButton runButton = new JButton("Run");
 		runButton.addActionListener(x -> {
-			 // TODO: run
+			run();
 		});
 		processPanel.add(runButton);
 
@@ -108,11 +138,20 @@ public class SwingVisualizer {
 		JPanel setsAndPathsPanel = new JPanel();
 		setsAndPathsPanel.setLayout(new GridLayout(2, 1));
 
-		setsTable = new JTable(new String[][]{}, new String[]{"Index", "Object num", "Efficiency"});
+		setsModel = new DefaultTableModel();
+		setsModel.addColumn("index");
+		setsModel.addColumn("size");
+		setsModel.addColumn("object num");
+		setsModel.addColumn("efficiency");
+		JTable setsTable = new JTable(setsModel);
 		JScrollPane setsPane = new JScrollPane(setsTable);
 		setsAndPathsPanel.add(setsPane);
 
-		pathsTable = new JTable(new String[][]{}, new String[]{"Index", "Nodes", "Length"});
+		pathsModel = new DefaultTableModel();
+		pathsModel.addColumn("index");
+		pathsModel.addColumn("nodes");
+		pathsModel.addColumn("length");
+		JTable pathsTable = new JTable(pathsModel);
 		JScrollPane pathsPane = new JScrollPane(pathsTable);
 		setsAndPathsPanel.add(pathsPane);
 
@@ -123,10 +162,10 @@ public class SwingVisualizer {
 		JPanel graphInfoPanel = new JPanel();
 		TitledBorder infoBorder = new TitledBorder("Graph definition");
 		graphInfoPanel.setBorder(infoBorder);
-	   graphInfoPanel.setLayout(new GridLayout(1, 2, 25, 15));
+	   graphInfoPanel.setLayout(new GridLayout(1, 2));
 		mainFrame.add(graphInfoPanel);
 
-		graphInputTextArea = new JTextArea("todo: what to show?", 5, 5);
+		graphInputTextArea = new JTextArea("#example of lemin notation:\n3\n##start\ns 0 0\n##end\ne 0 0\ns-e", 25, 25);
 		JScrollPane scrollPane = new JScrollPane(graphInputTextArea);
 		graphInfoPanel.add(scrollPane);
 
@@ -135,17 +174,10 @@ public class SwingVisualizer {
 		mainFrame.setVisible(true);
 	}
 
-	// public void showEventDemo(){
-	//    JButton okButton = new JButton("OK");
-	//    okButton.setActionCommand("OK");
-	// 	okButton.addActionListener(e -> Main.lemin(new ByteArrayInputStream((descriptionTextArea.getText() + "\n\n").getBytes(StandardCharsets.UTF_8))));
-	//    controlPanel.add(okButton);
-
-	// 	descriptionTextArea = new JTextArea("XML or HTML String here", 5, 20);
-	// 	JScrollPane scrollPane = new JScrollPane(descriptionTextArea);
-	// 	controlPanel.add(scrollPane);
-
-	//    mainFrame.setVisible(true);
-	// }
+	private void emptyTableModel(DefaultTableModel model) {
+		for (int i = 0; i < model.getRowCount(); i++) {
+			model.removeRow(i);
+		}
+	}
 
  }

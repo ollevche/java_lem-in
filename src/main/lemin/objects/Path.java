@@ -51,6 +51,10 @@ public class Path implements Comparable<Path>
 		return String.format("path_%d (%d) %s", id, rooms.size(), rooms.toString());
 	}
 
+	public String StringNodes() {
+		return rooms.toString();
+	}
+
 	@Override
 	public int compareTo(Path p)
 	{

@@ -19,9 +19,9 @@ public class Main
 	public static final String VISUAL = "-visual";
 	public static final String CLI = "-cli";
 
-	public static void lemin(InputStream source) {
+	public static AntGraph lemin(InputStream source) {
 		AntFarm	antFarm = new AntFarm();
-		AntGraph antGraph;
+		AntGraph antGraph = null;
 
 		try(IOHandler ioHandler = new IOHandler(source))
 		{
@@ -43,6 +43,8 @@ public class Main
 		{
 			System.err.println("Cannot proceed normally: " + e.getMessage());
 		}
+
+		return antGraph;
 	}
 
 	public static void visual() {
