@@ -91,12 +91,12 @@ public class SwingVisualizer {
 		int ants = graph.getFarm().getAnts().getAmount();
 
 		emptyTableModel(setsModel);
-		setsModel.addRow(new String[]{"not set", Integer.toString(set.size()), Integer.toString(ants), Integer.toString(set.getSteps())});
+		setsModel.addRow(new String[]{"undefined", Integer.toString(set.size()), Integer.toString(ants), Integer.toString(set.getSteps())});
 
 		java.util.List<Path> paths = graph.getPaths();
 		emptyTableModel(pathsModel);
 		for (int i = 0; i < paths.size(); i++) {
-			pathsModel.addRow(new String[]{"not set", paths.get(i).StringNodes(), Integer.toString(paths.get(i).getLen())});
+			pathsModel.addRow(new String[]{"undefined", paths.get(i).StringNodes(), Integer.toString(paths.get(i).getLen())});
 		}
 	}
 
