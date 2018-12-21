@@ -1,6 +1,7 @@
 
 package lemin.util;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -25,9 +26,9 @@ public class IOHandler implements AutoCloseable
 	private Scanner	scanner;
 	private String	buffer;
 
-	public	IOHandler()
+	public	IOHandler(InputStream source)
 	{
-		scanner = new Scanner(System.in);
+		scanner = new Scanner(source);
 	}
 
 	private ObjectInfo	readObjInfo()
